@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Entity;
-
-use App\Repository\ProductRepository;
-use Doctrine\DBAL\Types\Types;
+use App\Repository\ProductssRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Category;
 
-#[ORM\Entity(repositoryClass: ProductRepository::class)]
-class Product
+#[ORM\Entity(repositoryClass: ProductssRepository::class)]
+class Productss
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -17,15 +16,17 @@ class Product
     #[ORM\Column(length: 100)]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(length: 100)]
     private ?string $description = null;
 
     #[ORM\Column]
     private ?float $price = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $image = null;
+    #[ORM\ManyToOne(inversedBy: 'productsses')]
+    private ?category $category = null;
 
+   
+   
     public function getId(): ?int
     {
         return $this->id;
@@ -67,15 +68,19 @@ class Product
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getCategory(): ?category
     {
-        return $this->image;
+        return $this->category;
     }
 
-    public function setImage(string $image): static
+    public function setCategory(?category $category): static
     {
-        $this->image = $image;
+        $this->category = $category;
 
         return $this;
     }
+
+
+
+   
 }

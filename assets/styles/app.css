@@ -1,4 +1,2 @@
-body {
-    background-color: rgb(161, 79, 109);
-    color: antiquewhite;
-}
+@import "tailwindcss";
+@source not "../../public";
