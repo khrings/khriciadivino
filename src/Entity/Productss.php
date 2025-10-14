@@ -22,10 +22,12 @@ class Productss
     #[ORM\Column]
     private ?float $price = null;
 
-    #[ORM\ManyToOne(inversedBy: 'productsses')]
-    private ?category $category = null;
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'productsses')]
+    #[ORM\Column(length: 255)]
+    private ?string $category = null;
 
-   
+   #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imagefilename = null;
    
     public function getId(): ?int
     {
@@ -67,15 +69,26 @@ class Productss
 
         return $this;
     }
+    
+public function getCategory(): ?string
+{
+    return $this->category;
+}
 
-    public function getCategory(): ?category
+public function setCategory(?string $category): static
+{
+    $this->category = $category;
+    return $this;
+}
+
+    public function getImagefilename(): ?string
     {
-        return $this->category;
+        return $this->imagefilename;
     }
 
-    public function setCategory(?category $category): static
+    public function setImagefilename(string $imagefilename): static
     {
-        $this->category = $category;
+        $this->imagefilename = $imagefilename;
 
         return $this;
     }

@@ -10,6 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+
+
+
 
 #[Route('/productss')]
 final class ProductssController extends AbstractController
@@ -22,25 +26,35 @@ final class ProductssController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_productss_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $productss = new Productss();
-        $form = $this->createForm(ProductssType::class, $productss);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($productss);
-            $entityManager->flush();
+#[Route('/new', name: 'app_productss_new', methods: ['GET', 'POST'])]
+public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+{
+    $productss = new Productss();
+    $form = $this->createForm(ProductssType::class, $productss);
+    $form->handleRequest($request);
 
-            return $this->redirectToRoute('app_productss_index', [], Response::HTTP_SEE_OTHER);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $imageFile = $form->get('imagefilename')->getData();
+        if ($imageFile) {
+            $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = $slugger->slug($originalFilename);
+            $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
+
+            $imageFile->move($this->getParameter('images_directory'), $newFilename);
+            $productss->setImageFilename($newFilename);
         }
+        $entityManager->persist($productss);
+        $entityManager->flush();
 
-        return $this->render('productss/new.html.twig', [
-            'productss' => $productss,
-            'form' => $form,
-        ]);
+        return $this->redirectToRoute('app_productss_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    return $this->render('productss/new.html.twig', [
+        'productss' => $productss,
+        'form' => $form,
+    ]);
+}
 
     #[Route('/{id}', name: 'app_productss_show', methods: ['GET'])]
     public function show(Productss $productss): Response
