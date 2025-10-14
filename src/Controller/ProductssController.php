@@ -15,6 +15,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 
 
+
 #[Route('/productss')]
 final class ProductssController extends AbstractController
 {

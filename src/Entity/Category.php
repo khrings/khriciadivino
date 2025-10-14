@@ -21,6 +21,7 @@ class Category
     /**
      * @var Collection<int, Productss>
      */
+    
     #[ORM\OneToMany(targetEntity: Productss::class, mappedBy: 'category')]
     private Collection $productsses;
 
