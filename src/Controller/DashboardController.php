@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Dashboard;
 use App\Form\DashboardType;
 use App\Repository\DashboardRepository;
+use App\Repository\ProductssRepository; // ✅ Add this line
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,13 +15,24 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/dashboard')]
 final class DashboardController extends AbstractController
 {
-    #[Route(name: 'app_dashboard_index', methods: ['GET'])]
-    public function index(DashboardRepository $dashboardRepository): Response
-    {
-        return $this->render('dashboard/index.html.twig', [
-            'dashboards' => $dashboardRepository->findAll(),
-        ]);
-    }
+   #[Route(name: 'app_dashboard_index', methods: ['GET'])]
+public function index(DashboardRepository $dashboardRepository, ProductssRepository $productssRepository): Response
+{
+    // Count total products
+    $totalProducts = $productssRepository->count([]);
+
+    // Sum total quantity of all products → total stocks
+    $totalStocks = $productssRepository->createQueryBuilder('p')
+        ->select('SUM(p.quantity)')
+        ->getQuery()
+        ->getSingleScalarResult();
+
+    return $this->render('dashboard/index.html.twig', [
+        'dashboards' => $dashboardRepository->findAll(),
+        'totalProducts' => $totalProducts,
+        'totalStocks' => $totalStocks ?? 0, // send totalStocks to Twig
+    ]);
+}
 
     #[Route('/new', name: 'app_dashboard_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -71,7 +83,7 @@ final class DashboardController extends AbstractController
     #[Route('/{id}', name: 'app_dashboard_delete', methods: ['POST'])]
     public function delete(Request $request, Dashboard $dashboard, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$dashboard->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $dashboard->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($dashboard);
             $entityManager->flush();
         }

@@ -21,15 +21,8 @@ class Category
     /**
      * @var Collection<int, Productss>
      */
-    
     #[ORM\OneToMany(targetEntity: Productss::class, mappedBy: 'category')]
     private Collection $productsses;
-
-    
-public function __toString(): string
-{
-    return (string) $this->getName() ?? '';
-}
 
     public function __construct()
     {
@@ -60,6 +53,11 @@ public function __toString(): string
     {
         return $this->productsses;
     }
+    // In src/Entity/Category.php
+public function __toString(): string
+{
+    return $this->name ?? '';
+}
 
     public function addProductss(Productss $productss): static
     {

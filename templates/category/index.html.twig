@@ -1,35 +1,85 @@
-{% extends 'base.html.twig' %}
+{% extends '_layouts/master.html.twig' %}
 
-{% block title %}Category index{% endblock %}
+{% block title %}Category List{% endblock %}
 
 {% block body %}
-    <h1>Category index</h1>
+<div style="padding: 20px;">
+    <div class="container mx-auto px-1 py-1" style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Category List</h1>
+            <a href="{{ path('app_category_new') }}" 
+               style="display: inline-flex; align-items: center; gap: 8px; background: #10b981; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600; transition: background 0.2s;">
+                <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Add New Category
+            </a>
+        </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for category in categories %}
-            <tr>
-                <td>{{ category.id }}</td>
-                <td>{{ category.name }}</td>
-                <td>
-                    <a href="{{ path('app_category_show', {'id': category.id}) }}">show</a>
-                    <a href="{{ path('app_category_edit', {'id': category.id}) }}">edit</a>
-                </td>
-            </tr>
+        {% if categories is empty %}
+            <div style="text-align: center; color: #6b7280; font-size: 16px; margin-top: 40px;">
+                No categories found.
+            </div>
         {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <!-- Category Cards Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;">
+            {% for category in categories %}
+                <div style="background: white; border-radius: 16px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); overflow: hidden; transition: transform 0.2s ease; text-align: center;">
+                    <!-- Icon Section -->
+                    <div style="background: #f8fafc; height: 120px; display: flex; align-items: center; justify-content: center;">
+                        {% set icon %}
+                            {% if 'food' in category.name|lower %}
+                                🍔
+                            {% elseif 'drink' in category.name|lower %}
+                                🧋
+                            {% elseif 'clothe' in category.name|lower %}
+                                👕
+                            {% elseif 'toy' in category.name|lower %}
+                                🧸
+                            {% elseif 'tech' in category.name|lower or 'gadget' in category.name|lower %}
+                                💻
+                            {% elseif 'book' in category.name|lower %}
+                                📚
+                            {% elseif 'beauty' in category.name|lower or 'makeup' in category.name|lower %}
+                                💄
+                            {% elseif 'pet' in category.name|lower %}
+                                🐾
+                            {% elseif 'plant' in category.name|lower %}
+                                🌿
+                            {% elseif 'game' in category.name|lower %}
+                                🎮
+                            {% else %}
+                                🛍️
+                            {% endif %}
+                        {% endset %}
+                        <span style="font-size: 50px;">{{ icon }}</span>
+                    </div>
 
-    <a href="{{ path('app_category_new') }}">Create new</a>
+                    <!-- Card Content -->
+                    <div style="padding: 16px;">
+                        <h3 style="font-size: 18px; font-weight: 600; color: #1f2937; margin-bottom: 8px;">
+                            {{ category.name }}
+                        </h3>
+
+                        <div style="font-size: 12px; color: #9ca3af; margin-bottom: 12px;">
+                            ID: {{ category.id }}
+                        </div>
+
+                        <div style="display: flex; justify-content: center; gap: 8px;">
+                            <a href="{{ path('app_category_show', {'id': category.id}) }}" 
+                               style="background: #3b82f6; color: white; padding: 6px 10px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600; transition: background 0.2s;">
+                                View
+                            </a>
+                            <a href="{{ path('app_category_edit', {'id': category.id}) }}" 
+                               style="background: #eab308; color: white; padding: 6px 10px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600; transition: background 0.2s;">
+                                Edit
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

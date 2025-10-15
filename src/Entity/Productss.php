@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 use App\Repository\ProductssRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Category;
 
@@ -22,12 +24,25 @@ class Productss
     #[ORM\Column]
     private ?float $price = null;
 
-    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'productsses')]
-    #[ORM\Column(length: 255)]
-    private ?string $category = null;
-
    #[ORM\Column(length: 255, nullable: true)]
     private ?string $imagefilename = null;
+
+   #[ORM\ManyToOne(inversedBy: 'productsses')]
+   private ?Category $category = null;
+
+   #[ORM\Column]
+   private ?float $quantity = null;
+
+   /**
+    * @var Collection<int, Stocks>
+    */
+   #[ORM\OneToMany(targetEntity: Stocks::class, mappedBy: 'productss')]
+   private Collection $Stocks;
+
+   public function __construct()
+   {
+       $this->Stocks = new ArrayCollection();
+   }
    
     public function getId(): ?int
     {
@@ -69,17 +84,7 @@ class Productss
 
         return $this;
     }
-    
-public function getCategory(): ?string
-{
-    return $this->category;
-}
 
-public function setCategory(?string $category): static
-{
-    $this->category = $category;
-    return $this;
-}
 
     public function getImagefilename(): ?string
     {
@@ -89,6 +94,60 @@ public function setCategory(?string $category): static
     public function setImagefilename(string $imagefilename): static
     {
         $this->imagefilename = $imagefilename;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?float
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(float $quantity): static
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Stocks>
+     */
+    public function getStocks(): Collection
+    {
+        return $this->Stocks;
+    }
+
+    public function addStock(Stocks $stock): static
+    {
+        if (!$this->Stocks->contains($stock)) {
+            $this->Stocks->add($stock);
+            $stock->setProductss($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStock(Stocks $stock): static
+    {
+        if ($this->Stocks->removeElement($stock)) {
+            // set the owning side to null (unless already changed)
+            if ($stock->getProductss() === $this) {
+                $stock->setProductss(null);
+            }
+        }
 
         return $this;
     }

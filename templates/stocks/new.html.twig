@@ -1,0 +1,12 @@
+
+{% extends '_layouts/master.html.twig' %}
+
+{% block title %}New Stocks{% endblock %}
+
+{% block body %}
+    <h1>Create new Stocks</h1>
+
+    {{ include('stocks/_form.html.twig') }}
+
+    <a href="{{ path('app_stocks_index') }}">back to list</a>
+{% endblock %}

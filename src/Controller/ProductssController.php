@@ -83,6 +83,18 @@ public function new(Request $request, EntityManagerInterface $entityManager, Slu
         ]);
     }
 
+    
+#[Route('/dashboard', name: 'app_dashboard')]
+public function dashboard(ProductssRepository $productssRepository): Response
+{
+    // Count total products
+    $totalProducts = $productssRepository->count([]);
+
+    return $this->render('dashboard/index.html.twig', [
+        'totalProducts' => $totalProducts,
+    ]);
+}
+
     #[Route('/{id}', name: 'app_productss_delete', methods: ['POST'])]
     public function delete(Request $request, Productss $productss, EntityManagerInterface $entityManager): Response
     {
