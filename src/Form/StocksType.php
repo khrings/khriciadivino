@@ -6,6 +6,7 @@ use App\Entity\Productss;
 use App\Entity\Stocks;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,18 +15,26 @@ class StocksType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('createAt', null, [
-                'widget' => 'single_text'
+            ->add('createAt', DateTimeType::class, [
+                'widget' => 'single_text',
+                'label' => 'Created At',
+                'required' => true,
             ])
-            ->add('updateAt', null, [
-                'widget' => 'single_text'
+            ->add('updateAt', DateTimeType::class, [
+                'widget' => 'single_text',
+                'label' => 'Updated At',
+                'required' => true,
             ])
             ->add('stockChangeLog')
+            ->add('quantityChange', null, [
+                'required' => false,
+                'label' => 'Quantity Change',
+            ])
             ->add('productss', EntityType::class, [
                 'class' => Productss::class,
-                'choice_label' => 'id',
-            ])
-        ;
+                'choice_label' => 'name', // use 'name' so users see product names, not IDs
+                'label' => 'Product',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
