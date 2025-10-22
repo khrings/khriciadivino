@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\StocksRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Productss;
 
 #[ORM\Entity(repositoryClass: StocksRepository::class)]
 class Stocks
@@ -24,7 +25,12 @@ class Stocks
     private ?string $stockChangeLog = null;
 
     #[ORM\ManyToOne(inversedBy: 'Stocks')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Productss $productss = null;
+
+    // 🧩 Add optional quantity change tracking if needed
+    #[ORM\Column(nullable: true)]
+    private ?float $quantityChange = null;
 
     public function getId(): ?int
     {
@@ -39,7 +45,6 @@ class Stocks
     public function setCreateAt(\DateTimeImmutable $createAt): static
     {
         $this->createAt = $createAt;
-
         return $this;
     }
 
@@ -51,7 +56,6 @@ class Stocks
     public function setUpdateAt(\DateTimeImmutable $updateAt): static
     {
         $this->updateAt = $updateAt;
-
         return $this;
     }
 
@@ -63,7 +67,6 @@ class Stocks
     public function setStockChangeLog(string $stockChangeLog): static
     {
         $this->stockChangeLog = $stockChangeLog;
-
         return $this;
     }
 
@@ -75,7 +78,17 @@ class Stocks
     public function setProductss(?Productss $productss): static
     {
         $this->productss = $productss;
+        return $this;
+    }
 
+    public function getQuantityChange(): ?float
+    {
+        return $this->quantityChange;
+    }
+
+    public function setQuantityChange(?float $quantityChange): static
+    {
+        $this->quantityChange = $quantityChange;
         return $this;
     }
 }

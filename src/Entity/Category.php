@@ -23,6 +23,7 @@ class Category
      */
     #[ORM\OneToMany(targetEntity: Productss::class, mappedBy: 'category')]
     private Collection $productsses;
+    
 
     public function __construct()
     {
