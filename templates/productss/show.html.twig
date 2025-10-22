@@ -69,12 +69,11 @@
 
                     <!-- Action Buttons -->
                     <div style="display: flex; gap: 8px;">
-                        <a href="{{ path('app_productss_edit', {'id': productss.id}) }}" 
+                        <a href="{{ path('app_productss_edit', {'id': productss.id}) }}"
                            style="flex: 1; background: #eab308; color: white; padding: 8px 12px; border-radius: 6px; text-decoration: none; text-align: center; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 4px; transition: background 0.2s;">
                             <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                             </svg>
-                            Edit
                         </a>
                         <form method="post" action="{{ path('app_productss_delete', {'id': productss.id}) }}" style="flex: 1; margin: 0;" onsubmit="return confirm('Are you sure you want to delete this product?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ productss.id) }}">

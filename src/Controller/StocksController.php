@@ -30,6 +30,11 @@ final class StocksController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $stock->setCreateAt(new \DateTimeImmutable());
+            $stock->setUpdateAt(new \DateTimeImmutable());
+            $quantityChange = $stock->getQuantityChange();
+            $logMessage = sprintf('Stock created with quantity change: %s on %s', $quantityChange, $stock->getCreateAt()->format('Y-m-d H:i:s'));
+            $stock->setStockChangeLog($logMessage);
             $entityManager->persist($stock);
             $entityManager->flush();
 
@@ -57,6 +62,10 @@ final class StocksController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $stock->setUpdateAt(new \DateTimeImmutable());
+            $quantityChange = $stock->getQuantityChange();
+            $logMessage = sprintf('Stock updated with quantity change: %s on %s', $quantityChange, $stock->getUpdateAt()->format('Y-m-d H:i:s'));
+            $stock->setStockChangeLog($logMessage);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_stocks_index', [], Response::HTTP_SEE_OTHER);

@@ -15,17 +15,6 @@ class StocksType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('createAt', DateTimeType::class, [
-                'widget' => 'single_text',
-                'label' => 'Created At',
-                'required' => true,
-            ])
-            ->add('updateAt', DateTimeType::class, [
-                'widget' => 'single_text',
-                'label' => 'Updated At',
-                'required' => true,
-            ])
-            ->add('stockChangeLog')
             ->add('quantityChange', null, [
                 'required' => false,
                 'label' => 'Quantity Change',

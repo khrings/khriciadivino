@@ -31,6 +31,16 @@
                 <th>Dateofbirth</th>
                 <td>{{ pet_profile_management.dateofbirth }}</td>
             </tr>
+            <tr>
+                <th>Image</th>
+                <td>
+                    {% if pet_profile_management.image %}
+                        <img src="{{ asset('uploads/pets/' ~ pet_profile_management.image) }}" alt="Pet Image" style="width: 100px; height: 100px;">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+            </tr>
         </tbody>
     </table>
 
