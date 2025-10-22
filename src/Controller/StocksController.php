@@ -30,35 +30,10 @@ final class StocksController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $now = new \DateTimeImmutable();
-            $stock->setCreateAt($now);
-            $stock->setUpdateAt($now);
-
-            // 🧩 Update related product quantity
-            $product = $stock->getProductss();
-            $quantityChange = $stock->getQuantityChange() ?? 0;
-
-            if ($product) {
-                $newQuantity = $product->getQuantity() + $quantityChange;
-                $product->setQuantity($newQuantity);
-                $entityManager->persist($product);
-            }
-
-            // Add change log entry
-            $log = sprintf(
-                "Stock updated for %s: %+d units (new total: %d)",
-                $product ? $product->getName() : 'Unknown Product',
-                $quantityChange,
-                $product ? $product->getQuantity() : 0
-            );
-            $stock->setStockChangeLog($log);
-
             $entityManager->persist($stock);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Stock added and product quantity updated successfully.');
-
-            return $this->redirectToRoute('app_stocks_index');
+            return $this->redirectToRoute('app_stocks_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('stocks/new.html.twig', [
@@ -82,22 +57,9 @@ final class StocksController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $stock->setUpdateAt(new \DateTimeImmutable());
-
-            $product = $stock->getProductss();
-            $quantityChange = $stock->getQuantityChange() ?? 0;
-
-            if ($product) {
-                $newQuantity = $product->getQuantity() + $quantityChange;
-                $product->setQuantity($newQuantity);
-                $entityManager->persist($product);
-            }
-
             $entityManager->flush();
 
-            $this->addFlash('success', 'Stock and product quantity updated.');
-
-            return $this->redirectToRoute('app_stocks_index');
+            return $this->redirectToRoute('app_stocks_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('stocks/edit.html.twig', [
@@ -114,6 +76,6 @@ final class StocksController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_stocks_index');
+        return $this->redirectToRoute('app_stocks_index', [], Response::HTTP_SEE_OTHER);
     }
 }

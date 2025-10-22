@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Entity;
+
 use App\Repository\ProductssRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -24,26 +25,26 @@ class Productss
     #[ORM\Column]
     private ?float $price = null;
 
-   #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $imagefilename = null;
 
-   #[ORM\ManyToOne(inversedBy: 'productsses')]
-   private ?Category $category = null;
+    #[ORM\ManyToOne(inversedBy: 'productsses')]
+    private ?Category $category = null;
 
-   #[ORM\Column]
-   private ?float $quantity = null;
+    #[ORM\Column]
+    private ?int $quantity = null; // changed to int
 
-   /**
-    * @var Collection<int, Stocks>
-    */
-   #[ORM\OneToMany(targetEntity: Stocks::class, mappedBy: 'productss')]
-   private Collection $Stocks;
+    /**
+     * @var Collection<int, Stocks>
+     */
+    #[ORM\OneToMany(targetEntity: Stocks::class, mappedBy: 'productss')]
+    private Collection $stocks; // lowercase
 
-   public function __construct()
-   {
-       $this->Stocks = new ArrayCollection();
-   }
-   
+    public function __construct()
+    {
+        $this->stocks = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -57,7 +58,6 @@ class Productss
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -69,7 +69,6 @@ class Productss
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -81,20 +80,17 @@ class Productss
     public function setPrice(float $price): static
     {
         $this->price = $price;
-
         return $this;
     }
-
 
     public function getImagefilename(): ?string
     {
         return $this->imagefilename;
     }
 
-    public function setImagefilename(string $imagefilename): static
+    public function setImagefilename(?string $imagefilename): static
     {
         $this->imagefilename = $imagefilename;
-
         return $this;
     }
 
@@ -106,19 +102,17 @@ class Productss
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
-
         return $this;
     }
 
-    public function getQuantity(): ?float
+    public function getQuantity(): ?int
     {
         return $this->quantity;
     }
 
-    public function setQuantity(float $quantity): static
+    public function setQuantity(int $quantity): static
     {
         $this->quantity = $quantity;
-
         return $this;
     }
 
@@ -127,32 +121,25 @@ class Productss
      */
     public function getStocks(): Collection
     {
-        return $this->Stocks;
+        return $this->stocks;
     }
 
     public function addStock(Stocks $stock): static
     {
-        if (!$this->Stocks->contains($stock)) {
-            $this->Stocks->add($stock);
+        if (!$this->stocks->contains($stock)) {
+            $this->stocks->add($stock);
             $stock->setProductss($this);
         }
-
         return $this;
     }
 
     public function removeStock(Stocks $stock): static
     {
-        if ($this->Stocks->removeElement($stock)) {
-            // set the owning side to null (unless already changed)
+        if ($this->stocks->removeElement($stock)) {
             if ($stock->getProductss() === $this) {
                 $stock->setProductss(null);
             }
         }
-
         return $this;
     }
-
-
-
-   
 }

@@ -1,0 +1,43 @@
+{% extends '_layouts/master.html.twig' %}
+
+{% block title %}PetProfileManagement index{% endblock %}
+
+{% block body %}
+    <h1>PetProfileManagement index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Species</th>
+                <th>Breed</th>
+                <th>Age</th>
+                <th>Dateofbirth</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pet_profile_management in pet_profile_managements %}
+            <tr>
+                <td>{{ pet_profile_management.id }}</td>
+                <td>{{ pet_profile_management.name }}</td>
+                <td>{{ pet_profile_management.Species }}</td>
+                <td>{{ pet_profile_management.Breed }}</td>
+                <td>{{ pet_profile_management.Age }}</td>
+                <td>{{ pet_profile_management.dateofbirth }}</td>
+                <td>
+                    <a href="{{ path('app_pet_profile_management_show', {'id': pet_profile_management.id}) }}">show</a>
+                    <a href="{{ path('app_pet_profile_management_edit', {'id': pet_profile_management.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_pet_profile_management_new') }}">Create new</a>
+{% endblock %}

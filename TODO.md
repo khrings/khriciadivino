@@ -1,0 +1,5 @@
+- [x] Update container padding to px-4 py-4 for better fit in dashboard
+- [x] Wrap form fields (name, price, quantity, category) in a two-column grid layout for medium screens and up
+- [x] Make description field span full width (md:col-span-2) in the grid
+- [x] Ensure image upload section remains full width outside the grid
+- [x] Verify the layout fits the container properly (Symfony server started, but browser tool disabled; manual verification recommended)

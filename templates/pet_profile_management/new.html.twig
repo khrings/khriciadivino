@@ -1,0 +1,11 @@
+{% extends '_layouts/master.html.twig' %}
+
+{% block title %}New PetProfileManagement{% endblock %}
+
+{% block body %}
+    <h1>Create new PetProfileManagement</h1>
+
+    {{ include('pet_profile_management/_form.html.twig') }}
+
+    <a href="{{ path('app_pet_profile_management_index') }}">back to list</a>
+{% endblock %}
