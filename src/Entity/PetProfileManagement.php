@@ -25,8 +25,8 @@ class PetProfileManagement
     #[ORM\Column]
     private ?float $Age = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $dateofbirth = null;
+    #[ORM\Column(type: 'date', nullable: true)]
+    private ?\DateTimeInterface $dateofbirth = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
@@ -84,12 +84,12 @@ class PetProfileManagement
         return $this;
     }
 
-    public function getDateofbirth(): ?string
+    public function getDateofbirth(): ?\DateTimeInterface
     {
         return $this->dateofbirth;
     }
 
-    public function setDateofbirth(string $dateofbirth): static
+    public function setDateofbirth(?\DateTimeInterface $dateofbirth): static
     {
         $this->dateofbirth = $dateofbirth;
 

@@ -50,7 +50,7 @@
                             <strong>Age:</strong> {{ pet_profile_management.Age }} years
                         </div>
                         <div style="font-size: 14px; color: #6b7280; margin-bottom: 12px;">
-                            <strong>Birth Date:</strong> {{ pet_profile_management.dateofbirth }}
+                            <strong>Birth Date:</strong> {{ pet_profile_management.dateofbirth ? pet_profile_management.dateofbirth|date('M d, Y') : 'N/A' }}
                         </div>
 
                         <div style="display: flex; justify-content: center; gap: 8px;">
